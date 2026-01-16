@@ -6,11 +6,12 @@ import { decodeBase64, decodeAudioData } from '../utils/audio';
 interface StoryViewProps {
   segment: StorySegment;
   onChoice: (choice: StoryChoice) => void;
+  onShare?: () => void;
   isGenerating: boolean;
   isLast: boolean;
 }
 
-const StoryView: React.FC<StoryViewProps> = ({ segment, onChoice, isGenerating, isLast }) => {
+const StoryView: React.FC<StoryViewProps> = ({ segment, onChoice, onShare, isGenerating, isLast }) => {
   const audioContextRef = useRef<AudioContext | null>(null);
   const currentSourceRef = useRef<AudioBufferSourceNode | null>(null);
 
@@ -53,8 +54,8 @@ const StoryView: React.FC<StoryViewProps> = ({ segment, onChoice, isGenerating, 
   };
 
   return (
-    <div className={`transition-all duration-1000 ease-out ${isLast ? 'opacity-100 scale-100 translate-y-0' : 'opacity-40 scale-95 blur-sm translate-y-10 pointer-events-none'}`}>
-      <div className="w-full bg-slate-900/40 dark:bg-slate-900/60 rounded-[3rem] overflow-hidden border border-slate-700/30 shadow-[0_32px_64px_-16px_rgba(0,0,0,0.5)] backdrop-blur-3xl group">
+    <div className={`transition-all duration-1000 ease-out relative ${isLast ? 'opacity-100 scale-100 translate-y-0' : 'opacity-30 scale-95 blur-sm translate-y-10 pointer-events-none'}`}>
+      <div className="w-full bg-slate-900/40 dark:bg-slate-900/60 rounded-[3rem] overflow-hidden border border-slate-700/30 shadow-[0_32px_64px_-16px_rgba(0,0,0,0.5)] backdrop-blur-3xl group relative">
         {segment.imageUrl && (
           <div className="w-full aspect-[21/9] relative overflow-hidden">
             <img 
@@ -63,12 +64,18 @@ const StoryView: React.FC<StoryViewProps> = ({ segment, onChoice, isGenerating, 
               className="w-full h-full object-cover transition-transform duration-[2s] group-hover:scale-110"
             />
             <div className="absolute inset-0 bg-gradient-to-t from-slate-950 via-slate-950/20 to-transparent"></div>
-            <div className="absolute bottom-6 left-12">
-               <div className="w-12 h-1 bg-white/30 rounded-full overflow-hidden">
-                  <div className="h-full bg-white animate-[progress_10s_linear_infinite]"></div>
-               </div>
-            </div>
           </div>
+        )}
+
+        {/* Share Button Floating */}
+        {onShare && (
+           <button 
+             onClick={onShare}
+             className="absolute top-8 right-8 w-12 h-12 rounded-full bg-white/10 backdrop-blur-md border border-white/5 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-all hover:bg-white/20 z-20"
+             title="Aesthetic Share Mode"
+           >
+             ✨
+           </button>
         )}
 
         <div className="p-8 md:p-16">
@@ -91,8 +98,6 @@ const StoryView: React.FC<StoryViewProps> = ({ segment, onChoice, isGenerating, 
                     {choice.text}
                   </span>
                   <div className="absolute inset-0 bg-gradient-to-br from-amber-500/5 to-transparent rounded-[2rem] opacity-0 group-hover:opacity-100 transition-opacity"></div>
-                  
-                  {/* Hover arrow icon */}
                   <div className="absolute bottom-6 right-8 text-2xl translate-x-4 opacity-0 group-hover:translate-x-0 group-hover:opacity-100 transition-all">
                     →
                   </div>
@@ -113,13 +118,6 @@ const StoryView: React.FC<StoryViewProps> = ({ segment, onChoice, isGenerating, 
           )}
         </div>
       </div>
-      
-      <style>{`
-        @keyframes progress {
-          0% { width: 0%; }
-          100% { width: 100%; }
-        }
-      `}</style>
     </div>
   );
 };
