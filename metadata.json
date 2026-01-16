@@ -1,0 +1,7 @@
+{
+  "name": "TellATale",
+  "description": "An immersive AI-powered storyteller that generates branching narratives, visual illustrations, and atmospheric narration using Gemini 3.",
+  "requestFramePermissions": [
+    "microphone"
+  ]
+}
