@@ -6,7 +6,7 @@ export interface StorySegment {
   choices: StoryChoice[];
   imageUrl?: string;
   audioData?: string;
-  soulInsight?: string; // AI's brief psychological comment on the choice
+  soulInsight?: string;
 }
 
 export interface StoryChoice {
@@ -15,7 +15,7 @@ export interface StoryChoice {
 }
 
 export interface SoulTraits {
-  valiance: number; // 0-100
+  valiance: number;
   empathy: number;
   shadow: number;
   logic: number;
@@ -26,6 +26,21 @@ export interface PersonalityProfile {
   traits: SoulTraits;
   summary: string;
   archetypeMatch: string;
+}
+
+export interface SavedStory {
+  id: string;
+  title: string;
+  genre: string;
+  timestamp: number;
+  segments: StorySegment[];
+  personality: PersonalityProfile;
+}
+
+export interface User {
+  username: string;
+  password?: string; // Stored in plain text for this simple simulation as requested
+  history: SavedStory[];
 }
 
 export interface StoryState {
